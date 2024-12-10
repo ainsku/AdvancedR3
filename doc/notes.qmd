@@ -5,6 +5,6 @@ format: html
 ---
 
 ```{r}
-
+styler::style_dir() # Styles all filer in a directory
 ```
 
