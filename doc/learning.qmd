@@ -4,8 +4,6 @@ author: "Your Name"
 format: html
 ---
 
-## Header 1
-
 ```{r setup}
 #| include: false
 targets::tar_config_set(store = here::here("_targets"))
@@ -18,7 +16,10 @@ lipidomics <- tar_read(lipidomics)
 ## Results
 
 ```{r}
-tar_read(df_stats_by_metabolite)
+tar_read(df_stats_by_metabolite) |> 
+  mutate(MeanSD = glue::glue("{value_mean} ({value_sd})")) |> 
+  select(Metabolite = metabolite, 'Mean SD' = MeanSD) |> # quotations might have to be ``, but '' and "" might also work.
+  knitr::kable(caption = "Descriptive statistics of the metabolites.")
 ```
 
 ```{r}
