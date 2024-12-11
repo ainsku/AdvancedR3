@@ -18,3 +18,14 @@ descriptive_stats <- function(data) {
             ~ round(.x, digits = 1)
         ))
 }
+
+#' A histogram of metabolite distributions
+#'
+#' @param data
+#'
+#' @return A plot object
+plot_distributions <- function(data) {
+    ggplot2::ggplot(data, aes(x = value)) +
+        ggplot2::geom_histogram() +
+        ggplot2::facet_wrap(vars(metabolite), scales = "free")
+}
