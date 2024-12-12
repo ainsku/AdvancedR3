@@ -151,10 +151,27 @@ calculate_estimates <- function(data) {
     dplyr::filter(stringr::str_detect(term, "metabolite_"))
 
   data |>
-    select(metabolite) |>
-    mutate(term = metabolite) |>
+    dplyr::select(metabolite) |>
+    dplyr::mutate(term = metabolite) |>
     column_values_to_snake_case(term) |>
-    mutate(term = str_c("metabolite_", term)) |>
-    distinct(metabolite, term) |>
-    right_join(model_estimates, by = "term")
+    dplyr::mutate(term = stringr::str_c("metabolite_", term)) |>
+    dplyr::distinct(metabolite, term) |>
+    dplyr::right_join(model_estimates, by = "term")
+}
+
+#' Create visualization of the results.
+#'
+#' @param results The lipidomics data set.
+#'
+#' @return A figure
+plot_estimates <- function(results) {
+  results |>
+    ggplot2::ggplot(ggplot2::aes(
+      x = estimate,
+      y = metabolite,
+      xmin = estimate - std.error,
+      xmax = estimate + std.error
+    )) +
+    ggplot2::geom_pointrange() +
+    ggplot2::coord_fixed(xlim = c(0, 5))
 }
